@@ -1,8 +1,13 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 #include "Eigen/Dense"
+#include "tools.h"
 
 class KalmanFilter {
+private:
+  // added for calculating jacobian matrix
+  Tools tools_;
+  
 public:
 
   // state vector
@@ -22,6 +27,9 @@ public:
 
   // measurement covariance matrix
   Eigen::MatrixXd R_;
+    
+  // process identity matrix
+  Eigen::MatrixXd I_;
 
   /**
    * Constructor
