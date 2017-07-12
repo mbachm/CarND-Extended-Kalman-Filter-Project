@@ -53,7 +53,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     
     //check division by zero
     float added_pow_px_py = pow(px, 2) + pow(py, 2);
-    if(added_pow_px_py == 0) {
+    if(fabs(added_pow_px_py) < 0.0001) {
         std::cout << "CalculateJacobian() - Error - Division by zero" << std::endl;
         return Hj;
     }
@@ -62,15 +62,11 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     float sqrt_added_pow_px_py = sqrt(added_pow_px_py);
     float mul_vx_py = vx * py;
     float mul_vy_px = vy * px;
-    float column2_dom = pow(pow(px, 2) + pow(py,2), 3./2.);
-    Hj(0,0) = px / sqrt_added_pow_px_py;
-    Hj(0,1) = py / sqrt_added_pow_px_py;
-    Hj(1,0) = -py / added_pow_px_py;
-    Hj(1,1) = px / added_pow_px_py;
-    Hj(2,0) = py * (mul_vx_py - mul_vy_px) / column2_dom;
-    Hj(2,1) = px * (mul_vy_px - mul_vx_py) / column2_dom;
-    Hj(2,2) = px / sqrt_added_pow_px_py;
-    Hj(2,3) = py / sqrt_added_pow_px_py;
+    float column2_dom = added_pow_px_py*sqrt_added_pow_px_py;
+    
+    Hj << (px/sqrt_added_pow_px_py), (py/sqrt_added_pow_px_py), 0, 0,
+          (-py/added_pow_px_py), (px/added_pow_px_py), 0, 0,
+          (py*(mul_vx_py-mul_vy_px)/column2_dom), (px*(mul_vy_px-mul_vx_py)/column2_dom), (px/sqrt_added_pow_px_py), (py/sqrt_added_pow_px_py);
     
     return Hj;
 }

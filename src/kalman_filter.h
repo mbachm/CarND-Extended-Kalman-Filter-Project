@@ -5,8 +5,15 @@
 
 class KalmanFilter {
 private:
-  // added for calculating jacobian matrix
-  Tools tools_;
+  /**
+   *
+   */
+  void Estimate(const Eigen::VectorXd &y);
+    
+  /**
+   *
+   */
+  VectorXd h(const VectorXd &x);
   
 public:
 
@@ -27,10 +34,7 @@ public:
 
   // measurement covariance matrix
   Eigen::MatrixXd R_;
-    
-  // process identity matrix
-  Eigen::MatrixXd I_;
-
+  
   /**
    * Constructor
    */
