@@ -76,6 +76,12 @@ public:
    */
   void UpdateEKF(const Eigen::VectorXd &z);
 
+  /**
+   * Normalizes phi with atan2
+   * @param phi The angle measurement of phi
+   */
+  double normalize_phi(double phi);
+
 };
 
 #endif /* KALMAN_FILTER_H_ */

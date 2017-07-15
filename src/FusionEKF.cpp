@@ -8,7 +8,7 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
 
-/*
+/**
  * Constructor.
  */
 FusionEKF::FusionEKF() {
@@ -34,12 +34,6 @@ FusionEKF::FusionEKF() {
   H_laser_ << 1, 0, 0, 0,
               0, 1, 0, 0;
 
-  /**
-  TODO:
-    * Finish initializing the FusionEKF.
-    * Set the process and measurement noises
-  */
-
   VectorXd x_(4);
   x_ << 1, 1, 1, 1;
   
@@ -62,9 +56,6 @@ FusionEKF::FusionEKF() {
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-    
-    
-
   /*****************************************************************************
    *  Initialization
    ****************************************************************************/
@@ -76,11 +67,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
-      //Conversion
-      auto rho = measurement_pack.raw_measurements_[0];
-      auto phi = measurement_pack.raw_measurements_[1];
-      auto px = rho * cos(phi);
-      auto py = rho * sin(phi);
+      double rho = measurement_pack.raw_measurements_[0];
+      double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
+      double px = rho * cos(phi);
+      double py = rho * sin(phi);
       
       //initialize state
       ekf_.x_ << px, py, 0, 0;
@@ -128,15 +118,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    *  Update
    ****************************************************************************/
 
-  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {/*
+  if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     //Use the radar sensor type to perform the update step.
     ekf_.R_ = R_radar_;
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     
     VectorXd z(3);
-    auto rho = measurement_pack.raw_measurements_[0];
-    auto phi = measurement_pack.raw_measurements_[1];
-    auto rhodot = measurement_pack.raw_measurements_[2];
+    double rho = measurement_pack.raw_measurements_[0];
+    double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
+    double rhodot = measurement_pack.raw_measurements_[2];
     z << rho, phi, rhodot;
     
     //Update the state and covariance matrices.
@@ -144,15 +134,15 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.UpdateEKF(z);
     } else {
         cout << "Jacobian matrix is zero!" << endl;
-    }*/
+    }
   } else {
     //Use the laser sensor type to perform the update step.
     ekf_.R_ = R_laser_;
     ekf_.H_ = H_laser_;
     
     VectorXd z(2);
-    auto px = measurement_pack.raw_measurements_[0];
-    auto py = measurement_pack.raw_measurements_[1];
+    double px = measurement_pack.raw_measurements_[0];
+    double py = measurement_pack.raw_measurements_[1];
     z << px, py;
     
     //Update the state and covariance matrices.
@@ -160,6 +150,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   }
 
   // print the output
-  //cout << "x_ = " << ekf_.x_ << endl;
-  //cout << "P_ = " << ekf_.P_ << endl;
+  cout << "x_ = " << ekf_.x_ << endl;
+  cout << "P_ = " << ekf_.P_ << endl;
 }
