@@ -1,8 +1,20 @@
 #ifndef KALMAN_FILTER_H_
 #define KALMAN_FILTER_H_
 #include "Eigen/Dense"
+#include "tools.h"
 
 class KalmanFilter {
+private:
+  /**
+   *
+   */
+  void Estimate(const Eigen::VectorXd &y);
+    
+  /**
+   *
+   */
+  VectorXd h(const VectorXd &x);
+  
 public:
 
   // state vector
@@ -22,7 +34,7 @@ public:
 
   // measurement covariance matrix
   Eigen::MatrixXd R_;
-
+  
   /**
    * Constructor
    */
@@ -63,6 +75,12 @@ public:
    * @param z The measurement at k+1
    */
   void UpdateEKF(const Eigen::VectorXd &z);
+
+  /**
+   * Normalizes phi with atan2
+   * @param phi The angle measurement of phi
+   */
+  double normalize_phi(double phi);
 
 };
 

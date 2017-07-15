@@ -10,6 +10,11 @@
 #include "tools.h"
 
 class FusionEKF {
+private:
+  //Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
+  const double noise_ax_ = 9.;
+  const double noise_ay_ = 9.;
+
 public:
   /**
   * Constructor.
