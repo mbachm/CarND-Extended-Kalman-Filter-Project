@@ -53,7 +53,7 @@ void KalmanFilter::Estimate(const VectorXd &y) {
     
   //new estimate
   x_ = x_ + (K * y);
-  long x_size = x_.size();
+  const long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
 }
@@ -64,18 +64,18 @@ VectorXd KalmanFilter::h(const VectorXd &x) {
    */
   
   // extract position and velocity
-  double px = x(0);
-  double py = x(1);
-  double vx = x(2);
-  double vy = x(3);
+  const double px = x(0);
+  const double py = x(1);
+  const double vx = x(2);
+  const double vy = x(3);
 
   //Calculate rho, phi and rhodot with a check division by zero
   double rho = sqrt(px*px + py*py);
   if(rho < 0.0001){
     rho = 0.0001;
   }
-  double phi = normalize_phi(atan2(py, px));
-  double rho_dot = (px*vx + py*vy) / rho;
+  const double phi = normalize_phi(atan2(py, px));
+  const double rho_dot = (px*vx + py*vy) / rho;
   
   //generate h'(x)
   VectorXd hx = VectorXd(3);

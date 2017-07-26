@@ -67,10 +67,10 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
-      double rho = measurement_pack.raw_measurements_[0];
-      double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
-      double px = rho * cos(phi);
-      double py = rho * sin(phi);
+      const double rho = measurement_pack.raw_measurements_[0];
+      const double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
+      const double px = rho * cos(phi);
+      const double py = rho * sin(phi);
       
       //initialize state
       ekf_.x_ << px, py, 0, 0;
@@ -93,7 +93,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    ****************************************************************************/
 
   //Time is measured in seconds.
-  double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
+  const double dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0; //dt - expressed in seconds
   
   //Update the state transition matrix F according to the new elapsed time.
   ekf_.F_ << 1, 0, dt, 0,
@@ -102,9 +102,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
              0, 0, 0, 1;
   
   //Update the process noise covariance matrix.
-  double dt_2 = dt * dt;
-  double dt_3 = dt_2 * dt;
-  double dt_4 = dt_3 * dt;
+  const double dt_2 = dt * dt;
+  const double dt_3 = dt_2 * dt;
+  const double dt_4 = dt_3 * dt;
   ekf_.Q_ = MatrixXd(4, 4);
   ekf_.Q_ << dt_4/4*noise_ax_, 0, dt_3/2*noise_ax_, 0,
              0, dt_4/4*noise_ay_, 0, dt_3/2*noise_ay_,
@@ -124,9 +124,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     
     VectorXd z(3);
-    double rho = measurement_pack.raw_measurements_[0];
-    double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
-    double rhodot = measurement_pack.raw_measurements_[2];
+    const double rho = measurement_pack.raw_measurements_[0];
+    const double phi = ekf_.normalize_phi(measurement_pack.raw_measurements_[1]);
+    const double rhodot = measurement_pack.raw_measurements_[2];
     z << rho, phi, rhodot;
     
     //Update the state and covariance matrices.
@@ -141,8 +141,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.H_ = H_laser_;
     
     VectorXd z(2);
-    double px = measurement_pack.raw_measurements_[0];
-    double py = measurement_pack.raw_measurements_[1];
+    const double px = measurement_pack.raw_measurements_[0];
+    const double py = measurement_pack.raw_measurements_[1];
     z << px, py;
     
     //Update the state and covariance matrices.
