@@ -7,7 +7,15 @@ build/
 # editor config
 .vscode/
 
+#cmake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+
 # Xcode
+ExtendedKF.build/
+ExtendedKF.xcodeproj/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
