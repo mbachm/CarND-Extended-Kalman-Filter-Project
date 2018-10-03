@@ -31,3 +31,8 @@ xcuserdata/
 ide_profiles/xcode/Debug/
 ide_profiles/xcode/ExtendedKF.build/
 ide_profiles*
+
+# CLion
+.idea/
+ExtendedKF.cbp
+Makefile
